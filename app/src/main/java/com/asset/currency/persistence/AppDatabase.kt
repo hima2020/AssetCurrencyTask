@@ -6,10 +6,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.asset.currency.domain.model.ConvertingHistory
 import com.asset.currency.domain.model.DomainCurrency
 
 
-@Database(entities = [DomainCurrency::class, CurrencyRate::class], version = 1, exportSchema = false)
+@Database(entities = [DomainCurrency::class, ConvertingHistory::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
  companion object {
@@ -21,5 +22,5 @@ abstract class AppDatabase : RoomDatabase() {
  }
 
  abstract fun currencyDao(): CurrencyDao
- abstract fun rateDao(): RateDAO
+ abstract fun convertingDao(): ConvertingDao
 }

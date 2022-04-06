@@ -53,7 +53,14 @@ class CurrencyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.model.observe(viewLifecycleOwner, Observer(::updateUi))
+        handleObservation()
 
+    }
+
+    private fun handleObservation() {
+        viewModel.convertingResult.observe(viewLifecycleOwner){
+            binding?.tvResult?.text = it.toString()
+        }
     }
 
     private fun updateUi(model: CurrencyViewModel.UiModel) {
@@ -92,13 +99,12 @@ class CurrencyFragment : Fragment() {
     }
     private fun handleUiActions(){
 
-
                     binding?.btnConvert?.setOnClickListener {
                         if (binding?.etAmount?.text.isNullOrEmpty()){
                             Toast.makeText(requireContext() , "Please enter amount to convert" , Toast.LENGTH_LONG).show()
                         }
                         else {
-                            showResult(currencyMap[binding?.spFrom?.selectedItem.toString()],currencyMap[binding?.spTo?.selectedItem.toString()],binding?.etAmount?.text.toString().toDouble())
+                            showResult(binding?.spFrom?.selectedItem.toString(),binding?.spTo?.selectedItem.toString(),binding?.etAmount?.text.toString().toDouble())
                         }
                     }
 
@@ -115,8 +121,8 @@ class CurrencyFragment : Fragment() {
 
     }
 
-    private fun showResult(from: Double?, to: Double?, amount: Double) {
-        binding?.tvResult?.text = (to!! / from!! *amount).round(2).toString()
+    private fun showResult(currencyFrom:String, currencyTo:String , amount: Double) {
+        viewModel.convertCurrencies(currencyFrom,currencyTo,currencyMap[currencyFrom]!!.toDouble(),currencyMap[currencyTo]!!.toDouble(),amount)
     }
 
     private fun hideKeyboard(activity: Activity) {
