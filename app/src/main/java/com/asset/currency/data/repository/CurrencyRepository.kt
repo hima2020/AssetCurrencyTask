@@ -24,4 +24,8 @@ class CurrencyRepository(
         localDataSource.insertConvertHistory(model)
         return true
     }
+
+    suspend fun getConvertingHistory(): List<ConvertingDataModel> {
+        return localDataSource.getConvertingHistory()
+    }
 }

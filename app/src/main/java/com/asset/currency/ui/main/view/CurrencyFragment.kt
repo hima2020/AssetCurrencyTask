@@ -1,29 +1,23 @@
-package com.asset.currency.ui.view
+package com.asset.currency.ui.main.view
 
 import android.R
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.asset.currency.data.model.CurrencyDataModel
 import com.asset.currency.databinding.FragmentCurrencyBinding
-import com.asset.currency.domain.model.RateDataModel
-import com.asset.currency.extensions.round
-import com.asset.currency.ui.viewmodel.CurrencyViewModel
+import com.asset.currency.ui.details.DetailsActivity
+import com.asset.currency.ui.main.viewmodel.CurrencyViewModel
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.reflect.full.memberProperties
 
 
 class CurrencyFragment : Fragment() {
@@ -54,7 +48,14 @@ class CurrencyFragment : Fragment() {
 
         viewModel.model.observe(viewLifecycleOwner, Observer(::updateUi))
         handleObservation()
+        initViews()
 
+    }
+
+    private fun initViews() {
+        binding?.btnDetails?.setOnClickListener {
+            startActivity(Intent(requireActivity(),DetailsActivity::class.java))
+        }
     }
 
     private fun handleObservation() {
@@ -100,6 +101,7 @@ class CurrencyFragment : Fragment() {
     private fun handleUiActions(){
 
                     binding?.btnConvert?.setOnClickListener {
+                        hideKeyboard(requireActivity())
                         if (binding?.etAmount?.text.isNullOrEmpty()){
                             Toast.makeText(requireContext() , "Please enter amount to convert" , Toast.LENGTH_LONG).show()
                         }
@@ -110,6 +112,7 @@ class CurrencyFragment : Fragment() {
 
 
         binding?.ivSwap?.setOnClickListener {
+            hideKeyboard(requireActivity())
             val fromSelection  = binding?.spFrom?.selectedItemPosition
             val toSelection = binding?.spTo?.selectedItemPosition
             binding?.spFrom?.setSelection(toSelection!!)
@@ -122,7 +125,7 @@ class CurrencyFragment : Fragment() {
     }
 
     private fun showResult(currencyFrom:String, currencyTo:String , amount: Double) {
-        viewModel.convertCurrencies(currencyFrom,currencyTo,currencyMap[currencyFrom]!!.toDouble(),currencyMap[currencyTo]!!.toDouble(),amount)
+        viewModel.convertCurrencies(currencyFrom,currencyTo,currencyMap[currencyTo]!!.toDouble(),currencyMap[currencyFrom]!!.toDouble(),amount)
     }
 
     private fun hideKeyboard(activity: Activity) {

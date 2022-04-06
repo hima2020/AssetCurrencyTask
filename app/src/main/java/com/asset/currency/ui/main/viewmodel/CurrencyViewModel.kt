@@ -1,4 +1,4 @@
-package com.asset.currency.ui.viewmodel
+package com.asset.currency.ui.main.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
