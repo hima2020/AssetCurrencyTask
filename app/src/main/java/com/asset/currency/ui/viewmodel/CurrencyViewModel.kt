@@ -7,6 +7,7 @@ import com.asset.currency.domain.usecases.GetLatestCurrencies
 import com.asset.currency.utils.ScopedViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import kotlin.reflect.full.memberProperties
 
 class CurrencyViewModel(
     private val getCurrencies: GetLatestCurrencies,
@@ -22,7 +23,7 @@ class CurrencyViewModel(
 
     sealed class UiModel {
         object Loading : UiModel()
-        class Content(val currencies: CurrencyDataModel) : UiModel()
+        class Content(val currencies: CurrencyDataModel ,val currencyMap :HashMap<String,Double>) : UiModel()
         object showUI : UiModel()
     }
 
@@ -37,9 +38,15 @@ class CurrencyViewModel(
     fun showUi() {
         launch {
             uiModel.value = UiModel.Loading
-            uiModel.value = UiModel.Content(getCurrencies.invoke() )
+            val currencies = getCurrencies.invoke()
+            uiModel.value = UiModel.Content(currencies,currencies.rates?.asMap() as HashMap<String, Double>)
 
         }
+    }
+
+    inline fun <reified T : Any> T.asMap() : Map<String, Any?> {
+        val props = T::class.memberProperties.associateBy { it.name }
+        return props.keys.associateWith { props[it]?.get(this) }
     }
 
     override fun onCleared() {

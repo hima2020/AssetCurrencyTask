@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.asset.currency.data.model.CurrencyDataModel
 import com.asset.currency.databinding.FragmentCurrencyBinding
 import com.asset.currency.domain.model.RateDataModel
+import com.asset.currency.extensions.round
 import com.asset.currency.ui.viewmodel.CurrencyViewModel
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -28,6 +30,8 @@ class CurrencyFragment : Fragment() {
 
     private var binding: FragmentCurrencyBinding? = null
     private lateinit var amount: String
+    lateinit var currencyMap :HashMap<String,Double>
+
     private var currenciesList: MutableList<CurrencyDataModel> = mutableListOf()
 
     private  val  viewModel: CurrencyViewModel by currentScope.viewModel(this)
@@ -49,6 +53,7 @@ class CurrencyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.model.observe(viewLifecycleOwner, Observer(::updateUi))
+
     }
 
     private fun updateUi(model: CurrencyViewModel.UiModel) {
@@ -59,7 +64,10 @@ class CurrencyFragment : Fragment() {
         when (model) {
 
             is CurrencyViewModel.UiModel.Content -> {
-                updateSpinners(model.currencies.rates)
+
+                currencyMap = model.currencyMap
+                updateSpinners(currencyMap)
+                handleUiActions()
             }
             CurrencyViewModel.UiModel.showUI -> {
                 viewModel.showUi()
@@ -67,30 +75,49 @@ class CurrencyFragment : Fragment() {
         }
     }
 
-    private fun updateSpinners(rates: RateDataModel?) {
+    private fun updateSpinners(map: HashMap<String,Double>) {
 
-        if (this::rateMAp.isInitialized)
-            rateMAp.clear()
+        if (map != null) {
 
-        rateMAp = rates?.asMap() as HashMap<String, Double>
-        val list: MutableList<String> = ArrayList()
-        for (rate in rateMAp){
-           list.add(rate.key)
+            val list: MutableList<String> = ArrayList()
+            for (rate in map) {
+                list.add(rate.key)
+            }
+            binding?.spFrom?.adapter =
+                ArrayAdapter<String>(requireActivity(), R.layout.simple_list_item_1, list)
+            binding?.spTo?.adapter =
+                ArrayAdapter<String>(requireActivity(), R.layout.simple_list_item_1, list)
+
         }
-        binding?.spFrom?.adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_list_item_1, list)
-        binding?.spTo?.adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_list_item_1, list)
+    }
+    private fun handleUiActions(){
+
+
+                    binding?.btnConvert?.setOnClickListener {
+                        if (binding?.etAmount?.text.isNullOrEmpty()){
+                            Toast.makeText(requireContext() , "Please enter amount to convert" , Toast.LENGTH_LONG).show()
+                        }
+                        else {
+                            showResult(currencyMap[binding?.spFrom?.selectedItem.toString()],currencyMap[binding?.spTo?.selectedItem.toString()],binding?.etAmount?.text.toString().toDouble())
+                        }
+                    }
+
+
+        binding?.ivSwap?.setOnClickListener {
+            val fromSelection  = binding?.spFrom?.selectedItemPosition
+            val toSelection = binding?.spTo?.selectedItemPosition
+            binding?.spFrom?.setSelection(toSelection!!)
+            binding?.spTo?.setSelection(fromSelection!!)
+
+        }
+
+
+
     }
 
-
-
-    inline fun <reified T : Any> T.asMap() : Map<String, Any?> {
-            val props = T::class.memberProperties.associateBy { it.name }
-            return props.keys.associateWith { props[it]?.get(this) }
-        }
-
-
-
-
+    private fun showResult(from: Double?, to: Double?, amount: Double) {
+        binding?.tvResult?.text = (to!! / from!! *amount).round(2).toString()
+    }
 
     private fun hideKeyboard(activity: Activity) {
         val imm: InputMethodManager =
