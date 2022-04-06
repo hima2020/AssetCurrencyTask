@@ -3,14 +3,17 @@ package com.asset.currency.di
 import android.app.Application
 import com.asset.currency.data.datasource.CurrencyDataSource
 import com.asset.currency.data.repository.CurrencyRepository
+import com.asset.currency.domain.usecases.GetConvertingHistory
 import com.asset.currency.domain.usecases.GetLatestCurrencies
 import com.asset.currency.domain.usecases.SaveConvertingHistory
 import com.asset.currency.persistence.AppDatabase
 import com.asset.currency.persistence.RoomDataSource
 import com.asset.currency.source.LocalDataSource
 import com.asset.currency.source.RemoteDataSource
-import com.asset.currency.ui.view.CurrencyFragment
-import com.asset.currency.ui.viewmodel.CurrencyViewModel
+import com.asset.currency.ui.details.DetailsActivity
+import com.asset.currency.ui.details.viewmodel.DetailsViewModel
+import com.asset.currency.ui.main.view.CurrencyFragment
+import com.asset.currency.ui.main.viewmodel.CurrencyViewModel
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -46,4 +49,12 @@ private val scopesModule = module {
         scoped { GetLatestCurrencies(get()) }
         scoped { SaveConvertingHistory(get()) }
     }
+
+    scope(named<DetailsActivity>()) {
+        viewModel { DetailsViewModel(get(), get(),get()) }
+        scoped { GetConvertingHistory(get()) }
+        scoped { GetLatestCurrencies(get()) }
+
+    }
+
 }

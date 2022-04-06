@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/sp_border.xml" value="0.2745" />
+        <entry key="app/src/main/res/layout/activity_details.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_currency.xml" value="0.31567028985507245" />
+        <entry key="app/src/main/res/layout/item_common_currencies.xml" value="0.10092592592592593" />
+        <entry key="app/src/main/res/layout/item_convert_history.xml" value="0.335" />
       </map>
     </option>
   </component>

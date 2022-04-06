@@ -1,11 +1,8 @@
 package com.asset.currency
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.asset.currency.ui.view.CurrencyFragment
-import com.asset.currency.ui.viewmodel.CurrencyViewModel
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import com.asset.currency.ui.main.view.CurrencyFragment
 
 class MainActivity : AppCompatActivity() {
 

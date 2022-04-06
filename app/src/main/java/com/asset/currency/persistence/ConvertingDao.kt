@@ -10,7 +10,7 @@ import com.asset.currency.domain.model.DomainCurrency
 interface ConvertingDao {
 
   @Query("SELECT * FROM ConvertingHistory")
-  fun getAll(): ConvertingHistory
+  fun getAll(): List<ConvertingHistory>
 
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   fun insertCurrencies(currencies: ConvertingHistory)

@@ -29,9 +29,8 @@ class RoomDataSource(db: AppDatabase) : LocalDataSource {
         withContext(Dispatchers.IO) { convertingDao.insertCurrencies(model.toRoomCurrency()) }
     }
 
-    override suspend fun getConvertingHistory(converting: List<ConvertingDataModel>) {
-        convertingDao.getAll().toDataModelCurrency()
-    }
+    override suspend fun getConvertingHistory():List<ConvertingDataModel> = withContext(Dispatchers.IO) {
+        convertingDao.getAll().map { it.toDataModelCurrency() }.toMutableList()}
 
     override suspend fun getLatestCurrencies(): CurrencyDataModel = withContext(Dispatchers.IO) {
         currencyDao.getAll().toDataModelCurrency()}
