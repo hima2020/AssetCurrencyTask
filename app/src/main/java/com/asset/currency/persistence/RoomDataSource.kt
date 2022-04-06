@@ -2,6 +2,7 @@ package com.asset.currency.persistence
 
 import com.asset.currency.data.mappers.toDataModelCurrency
 import com.asset.currency.data.mappers.toRoomCurrency
+import com.asset.currency.data.model.ConvertingDataModel
 import com.asset.currency.data.model.CurrencyDataModel
 import com.asset.currency.source.LocalDataSource
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,7 @@ import kotlinx.coroutines.withContext
 class RoomDataSource(db: AppDatabase) : LocalDataSource {
 
     private val currencyDao = db.currencyDao()
-
+    private val convertingDao = db.convertingDao()
 
     override suspend fun isEmpty(): Boolean =
         withContext(Dispatchers.IO) { currencyDao.currencyCount() <= 0 }
@@ -22,6 +23,14 @@ class RoomDataSource(db: AppDatabase) : LocalDataSource {
 
     override suspend fun saveCurrencies(currencies: CurrencyDataModel) {
         withContext(Dispatchers.IO) { currencyDao.insertCurrencies(currencies.toRoomCurrency()) }
+    }
+
+    override suspend fun insertConvertHistory(model: ConvertingDataModel) {
+        withContext(Dispatchers.IO) { convertingDao.insertCurrencies(model.toRoomCurrency()) }
+    }
+
+    override suspend fun getConvertingHistory(converting: List<ConvertingDataModel>) {
+        convertingDao.getAll().toDataModelCurrency()
     }
 
     override suspend fun getLatestCurrencies(): CurrencyDataModel = withContext(Dispatchers.IO) {

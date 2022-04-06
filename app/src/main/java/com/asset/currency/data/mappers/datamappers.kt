@@ -1,10 +1,9 @@
 package com.asset.currency.data.mappers
 
-import com.asset.currency.data.datasource.CurrencyDataSource
 import com.asset.currency.data.datasource.ServerCurrency
-import com.asset.currency.data.datasource.ServerRate
+import com.asset.currency.data.model.ConvertingDataModel
 import com.asset.currency.data.model.CurrencyDataModel
-import com.asset.currency.domain.model.RateDataModel
+import com.asset.currency.domain.model.ConvertingHistory
 import com.asset.currency.domain.model.DomainCurrency
 
 
@@ -15,6 +14,18 @@ fun CurrencyDataModel.toRoomCurrency(): DomainCurrency =
         base?:"EUR",
 
     )
+fun ConvertingDataModel.toRoomCurrency(): ConvertingHistory =
+    ConvertingHistory(
+        id = 0,
+        from,
+        to, amount, result, date, formatedDate)
+
+fun ConvertingHistory.toDataModelCurrency(): ConvertingDataModel =
+    ConvertingDataModel(
+        from,
+        to, amount, result, date, formatedDate)
+
+
 
 fun DomainCurrency.toDataModelCurrency(): CurrencyDataModel =
     CurrencyDataModel(

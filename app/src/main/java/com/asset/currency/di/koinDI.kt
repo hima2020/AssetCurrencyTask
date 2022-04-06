@@ -4,6 +4,7 @@ import android.app.Application
 import com.asset.currency.data.datasource.CurrencyDataSource
 import com.asset.currency.data.repository.CurrencyRepository
 import com.asset.currency.domain.usecases.GetLatestCurrencies
+import com.asset.currency.domain.usecases.SaveConvertingHistory
 import com.asset.currency.persistence.AppDatabase
 import com.asset.currency.persistence.RoomDataSource
 import com.asset.currency.source.LocalDataSource
@@ -41,7 +42,8 @@ val dataModule = module {
 
 private val scopesModule = module {
     scope(named<CurrencyFragment>()) {
-        viewModel { CurrencyViewModel(get(), get()) }
+        viewModel { CurrencyViewModel(get(), get(),get ()) }
         scoped { GetLatestCurrencies(get()) }
+        scoped { SaveConvertingHistory(get()) }
     }
 }

@@ -1,5 +1,6 @@
 package com.asset.currency.data.repository
 
+import com.asset.currency.data.model.ConvertingDataModel
 import com.asset.currency.data.model.CurrencyDataModel
 import com.asset.currency.source.LocalDataSource
 import com.asset.currency.source.RemoteDataSource
@@ -17,5 +18,10 @@ class CurrencyRepository(
         }
 
         return localDataSource.getLatestCurrencies()
+    }
+
+    suspend fun saveConvertingHistory(model:ConvertingDataModel): Boolean {
+        localDataSource.insertConvertHistory(model)
+        return true
     }
 }
