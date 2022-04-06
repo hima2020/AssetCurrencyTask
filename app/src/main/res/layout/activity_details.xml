@@ -26,7 +26,7 @@
         android:layout_marginTop="10dp"
         android:text="Converting History"
 
-        android:textColor="@color/black"
+        android:textColor="@color/primaryRed"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@id/divider"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,8 @@
         android:layout_marginTop="10dp"
         android:text="Common Rates"
 
-        android:textColor="@color/black"
+
+        android:textColor="@color/primaryRed"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/divider"

@@ -58,7 +58,7 @@
 
             <TextView
                 android:id="@+id/tvDate"
-                android:textColor="@color/purple_700"
+                android:textColor="@color/primaryRed"
                 android:text="4 4 1996"
                 android:textSize="10dp"
                 android:layout_width="0dp"

@@ -41,7 +41,7 @@ class DetailsViewModel(
     fun showUi() {
         launch {
             uiModel.value = UiModel.Loading
-            val history = getConvertingHistory.invoke()
+            val history = getConvertingHistory.invoke().reversed()
             val commonCurrenciesMap = getLatestCurrencies.invoke().rates?.asMap()
             val commonList = commonCurrenciesMap?.map {
                 CommonCurrency(it.key,it.value.toString())
