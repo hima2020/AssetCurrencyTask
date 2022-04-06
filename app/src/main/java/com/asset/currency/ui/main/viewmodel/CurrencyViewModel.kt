@@ -66,7 +66,7 @@ class CurrencyViewModel(
                 amount = amount,
                 result = result,
                 date = Date().time,
-                formatedDate = SimpleDateFormat("yyyy MM DD").format(Date().time)
+                formatedDate = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss").format(Date().time)
             ))
         }
     }

@@ -38,7 +38,7 @@
                 android:scaleType="fitCenter"
                 android:layout_marginHorizontal="15dp"
 
-                />
+                app:tint="@color/primaryRed" />
             <Spinner
                 android:id="@+id/sp_to"
 
